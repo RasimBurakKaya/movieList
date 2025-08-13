@@ -39,11 +39,22 @@ class RegisterRouter: RegisterRouterProtocol {
     
     func navigateToLogin(from view: UIViewController, userName: String) {
         
-        let loginVC = LoginRouter.createModules(with: userName)
+        /*let loginVC = LoginRouter.createModules(with: userName)
         
         if let navigationController = view.navigationController {
             navigationController.pushViewController(loginVC, animated: true)
-          }
+            
+          }*/
+        guard let navigationalController = view.navigationController else {return}
+        
+        for vc in navigationalController.viewControllers {
+            if let loginVC = vc as? LoginViewController {
+                //loginVC.didupdateUserName(name: userName)
+                navigationalController.popToViewController(loginVC, animated: true)
+                break
+            }
+        }
+    
     
     }
         

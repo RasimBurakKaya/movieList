@@ -14,6 +14,7 @@ class RegisterInteractor: RegisterInteractorProtocol {
     
     let firebaseManager = FirebaseManager()
     
+   // var presenter: RegisterInteractorDelegate?
     var presenter: RegisterPresenterProtocol?
     
     func register(email: String, password: String) {

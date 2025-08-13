@@ -12,9 +12,11 @@ protocol MovieListPresenterProtocol {
     func fetchedSuccess(movies: [Movie])
     func fetchedFailure(error: Error)
     func viewDidload()
-    func navigate(movie: Movie)
+    func navigateOverview(movie: Movie)
     var router: MovieListRouterProtocol? {get set}
     var userName: String? {get}
+    func navigateProfile()
+    func getUserName() -> String
 
 }
 
@@ -27,7 +29,8 @@ class MovieListPresenter {
     var router: MovieListRouterProtocol?
     var image: UIImage?
     var userName: String?
-    
+    var errorHandler: UINetworkInput?
+
 }
 extension MovieListPresenter: MovieListPresenterProtocol {
     func fetchedSuccess(movies: [Movie]) {
@@ -39,7 +42,8 @@ extension MovieListPresenter: MovieListPresenterProtocol {
     }
     
     func fetchedFailure(error: any Error) {
-        print("Error: \(error.localizedDescription)")
+        //print("Error: \(error.localizedDescription)")
+        errorHandler?.presentAlert(controller: view as! UIAlertController)
     }
     
     
@@ -48,10 +52,19 @@ extension MovieListPresenter: MovieListPresenterProtocol {
         
     }
     
-    func navigate(movie: Movie) {
+    func navigateOverview(movie: Movie) {
         guard let vc = view as? MovieListViewController else {return}
         router?.navigateToOverview(from: vc, movie: movie)
     }
     
+    func navigateProfile() {
+        guard let vc = view as? MovieListViewController else {return}
+        let currentName = interactor?.getUserName()
+        router?.navigateToProfile(from: vc)
+    }
+    
+    func getUserName() -> String {
+        return interactor?.getUserName() ?? ""
+    }
     
 }

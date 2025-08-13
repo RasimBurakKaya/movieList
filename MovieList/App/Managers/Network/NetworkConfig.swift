@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct NetworkConfig  {
+    static let baseUrl = URL(string: "https://api.themoviedb.org")!
+    let defaultHeaders: [String:String]
+}

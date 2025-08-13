@@ -22,7 +22,9 @@ class FavoriteListRouter: FavoriteListRouterProtocol {
         
         let presenter = FavoriteListPresenter()
         let interactor = FavoriteListInteractor()
+        let router = FavoriteListRouter()
         
+        presenter.router = router
         presenter.favoriteList = list
         presenter.interactor = interactor
         presenter.view = view
@@ -30,6 +32,5 @@ class FavoriteListRouter: FavoriteListRouterProtocol {
         
         return view
     }
-    
     
 }

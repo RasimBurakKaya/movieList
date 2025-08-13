@@ -18,6 +18,10 @@ protocol RegisterPresenterProtocol {
     var router: RegisterRouterProtocol? {get set}
 }
 
+/*protocol RegisterInteractorDelegate: AnyObject {
+    
+}*/
+
 class RegisterPresenter: RegisterPresenterProtocol {
     
     var interactor: RegisterInteractorProtocol?

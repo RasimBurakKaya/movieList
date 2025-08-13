@@ -11,7 +11,7 @@ protocol OverviewViewProtocol: AnyObject {
     func updateFavoriteIcon(_ isFavorite: Bool)
 }
 
-class OverviewViewController: UIViewController, OverviewViewProtocol {
+class OverviewViewController: BaseViewController, OverviewViewProtocol {
     
     var movie: Movie?
     var presenter: OverviewPresenterProtocol?
@@ -51,19 +51,16 @@ class OverviewViewController: UIViewController, OverviewViewProtocol {
                                  placeholder: UIImage(named: "placeholder"))
         
         imageView.contentMode = .scaleAspectFit
+        
+        navigationItem.hidesBackButton = false
     }
  
     @IBAction func topRatedMoviesButton(_ sender: UIButton) {
         presenter?.showMovieList()
     }
     
-    @IBAction func profileButton(_ sender: UIButton) {
-        performSegue(withIdentifier: "goToProfileFromOverview", sender: nil)
-    }
-    
     @IBAction func favoriteButton(_ sender: UIButton) {
         presenter?.favoriteDidTap()
-        
     }
     
     func updateFavoriteIcon(_ isFavorite: Bool) {
@@ -80,12 +77,6 @@ class OverviewViewController: UIViewController, OverviewViewProtocol {
         
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "goToProfileFromOverview" {
-            let destinationVC = segue.destination as? ProfileViewController
-            destinationVC?.text = presenter?.getUserName()
-        }
+    deinit {
     }
-    
 }

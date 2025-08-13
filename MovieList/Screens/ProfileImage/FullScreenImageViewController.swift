@@ -19,4 +19,7 @@ class FullScreenImageViewController: UIViewController {
         profileImage.image = image
 
     }
+    
+    deinit {
+    }
 }

@@ -46,9 +46,19 @@ class OverviewRouter: OverviewRouterProtocol {
     }
     
     func navigateToMovieList(from view: UIViewController, userName: String) {
-        let vc = MovieListRouter.createModules(userName: userName)
+       /* let vc = MovieListRouter.createModules(userName: userName)
         
-        view.navigationController?.pushViewController(vc, animated: true)
+        view.navigationController?.pushViewController(vc, animated: true)*/
+        
+        guard let navigationalController = view.navigationController else {return}
+        
+        for vc in navigationalController.viewControllers {
+            if let movieListVC = vc as? MovieListViewController {
+                movieListVC.didupdateUserName(name: userName)
+                navigationalController.popToViewController(movieListVC, animated: true)
+                break
+            }
+        }
     }
     
 }

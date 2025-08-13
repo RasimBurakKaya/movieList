@@ -9,7 +9,7 @@ import Foundation
 import FirebaseAuth
 import UIKit
 
-protocol LoginPresenterProtocol {
+protocol LoginPresenterProtocol: AnyObject {
     func loginSuccess()
     func loginFailure(error: Error)
     func presentToView(email: String, password: String)

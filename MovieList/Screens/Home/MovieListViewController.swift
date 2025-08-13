@@ -9,9 +9,10 @@ import UIKit
 
 protocol MovieListViewProtocol: AnyObject{
     func showMovies(movies: [Movie])
+    func didupdateUserName(name: String)
 }
 
-class MovieListViewController: UIViewController {
+class MovieListViewController: BaseViewController {
     
     var presenter: MovieListPresenterProtocol?
     
@@ -27,10 +28,13 @@ class MovieListViewController: UIViewController {
     @IBAction func topRatedMoviesButton(_ sender: UIButton) {
     }
     
-    
     @IBAction func profileButton(_ sender: UIButton) {
         
-        performSegue(withIdentifier: "fromMLtoProfile", sender: nil)
+       /* let storyboard = UIStoryboard(name: "Storyboard", bundle: nil)
+        guard let profilVC = storyboard.instantiateViewController(identifier: "ProfileViewController") as? ProfileViewController else {return}
+        profilVC.text = presenter?.userName
+        navigationController?.pushViewController(profilVC, animated: true)*/
+        presenter?.navigateProfile()
 
     }
     
@@ -57,13 +61,19 @@ class MovieListViewController: UIViewController {
         titleLabel.text = "Welcome \(name)"
         
         titleLabel.textColor = .white
-        
-        navigationItem.hidesBackButton = true
 
+    }
+    
+    deinit {
+        print("movie list vc silindi")
     }
 
 }
 extension MovieListViewController: MovieListViewProtocol {
+    func didupdateUserName(name: String) {
+        titleLabel.text = "Welcome \(name)"
+    }
+    
     func showMovies(movies: [Movie]) {
         self.movies = movies
         tableView.reloadData()
@@ -93,24 +103,18 @@ extension MovieListViewController: UITableViewDelegate, UITableViewDataSource{
         
         let movie = movies[indexPath.row]
         
-        presenter?.navigate(movie: movie)
+        presenter?.navigateOverview(movie: movie)
        
         //performSegue(withIdentifier: "goToOverview", sender: indexPath)
         
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       /* if segue.identifier == "goToOverview"{
-            let destinationVC = segue.destination as! OverviewViewController
-            
-            if let indexPath = sender as? IndexPath {
-                destinationVC.movie = movies[indexPath.row]
-            }
-        }*/ if segue.identifier == "fromMLtoProfile" {
+    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+      if segue.identifier == "fromMLtoProfile" {
             let destinationVC = segue.destination as! ProfileViewController
             destinationVC.text = presenter?.userName
         }
         
-    }
+    }*/
     
 }

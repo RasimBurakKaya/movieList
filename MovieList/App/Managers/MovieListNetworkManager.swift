@@ -10,24 +10,34 @@ import UIKit
 
 class NetworkManager {
     
-    func fetchMovies(completion: @escaping (Result<[Movie], Error>) -> Void) {
+    var mainNetworkManager: INetworkManager = MainNetworkManager()
+    let accountId = "6867691fc6d4322bdb991f74"
+    
+    func fetchMovies() async -> Result<[Movie], Error> {
+
+        let result: Result<MovieResult?, Error> = await mainNetworkManager.fetch(.ratedMovies(accountID: accountId), method: .GET, type: MovieResult.self)
+
+        switch result {
+        case .success(let movieResult):
+            return .success(movieResult?.results ?? [])
+        case .failure(let error):
+            return .failure(CustomError.networkError)
+        }
+    }
+    
+    /*func fetchMovies(completion: @escaping (Result<[Movie], Error>) -> Void) {
 
         let url = URL(string: "https://api.themoviedb.org/4/account/6867691fc6d4322bdb991f74/movie/rated")!
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
-        let queryItems: [URLQueryItem] = [
-          URLQueryItem(name: "page", value: "1"),
-          URLQueryItem(name: "language", value: "en-US"),
-          URLQueryItem(name: "sort_by", value: "created_at.asc"),
-        ]
-        components.queryItems = components.queryItems.map { $0 + queryItems } ?? queryItems
-
-        var request = URLRequest(url: components.url!)
+        
+        var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.timeoutInterval = 10
-        request.allHTTPHeaderFields = [
-          "accept": "application/json",
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkMzcyNWY1MTM2MWU4YTFiOTViMmQwYWE2OWQyNGYzNyIsIm5iZiI6MTc1MTYwNzU4My44NzYsInN1YiI6IjY4Njc2OTFmYzZkNDMyMmJkYjk5MWY3NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.m6Foqw3lsnQegRjCP62faLt1y22KWXj5OH9_JWhj8kU"
-        ]
+        request.setValue("application/json", forHTTPHeaderField: "accept")
+
+        if let jwt = TokenProvider.shared.load() {
+            request.setValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+        } else {
+            print("JWT bulunamadı, isteğe token eklenmedi.")
+        }
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             
@@ -55,6 +65,6 @@ class NetworkManager {
         
         task.resume()
 
-    }
+    }*/
 
 }

@@ -38,7 +38,6 @@ class RegisterViewController: UIViewController, RegisterViewProtocol {
         super.viewDidLoad()
         
         navigationItem.hidesBackButton = true
-        setupTapGesture()
         setupUI()
 
     }
@@ -65,6 +64,7 @@ class RegisterViewController: UIViewController, RegisterViewProtocol {
         reTypePasswordTextField.placeholder = "ReType Password"
         userNameTextField.placeholder = "User Name"
         
+        
         registerButton.backgroundColor = .black
         registerButton.tintColor = .white
         registerButton.layer.cornerRadius = 12
@@ -80,12 +80,5 @@ class RegisterViewController: UIViewController, RegisterViewProtocol {
         present(alert, animated: true)
     }
     
-    func setupTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-    }
     
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
 }

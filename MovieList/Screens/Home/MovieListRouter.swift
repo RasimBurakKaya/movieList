@@ -11,6 +11,7 @@ import UIKit
 protocol MovieListRouterProtocol {
     static func createModules(userName: String) -> UIViewController
     func navigateToOverview(from view: UIViewController, movie: Movie)
+    func navigateToProfile(from view: UIViewController)
 }
 
 class MovieListRouter: MovieListRouterProtocol {
@@ -45,7 +46,11 @@ class MovieListRouter: MovieListRouterProtocol {
         view.navigationController?.pushViewController(vc, animated: true)
     }
     
-    
+    func navigateToProfile(from view: UIViewController) {
+        let vc = ProfileRouter.createModules()
+        
+        view.navigationController?.pushViewController(vc, animated: true)
+    }
     
     
 }

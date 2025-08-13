@@ -6,3 +6,18 @@
 //
 
 import Foundation
+
+protocol ProfileInteractorProtocol {
+    func getCurrentUserName() -> String
+}
+
+class ProfileInteractor: ProfileInteractorProtocol {
+    
+    let sessionManager = SessionManager()
+    
+    func getCurrentUserName() -> String {
+        return sessionManager.currentUserName ?? ""
+    }
+    
+    
+}

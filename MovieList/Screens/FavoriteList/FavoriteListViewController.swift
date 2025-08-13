@@ -12,17 +12,12 @@ protocol FavoriteListViewProtocol {
     func showEmptyMessage()
 }
 
-class FavoriteListViewController: UIViewController, FavoriteListViewProtocol {
+class FavoriteListViewController: BaseViewController, FavoriteListViewProtocol {
     
     var favoriMovies: [String] = []
     var presenter: FavoriteListPresenterProtocol?
  
     @IBOutlet weak var tableView: UITableView!
-    
-    @IBOutlet weak var topRatedMoviesButton: UIButton!
-    
-    @IBOutlet weak var profileButton: UIButton!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,15 +36,8 @@ class FavoriteListViewController: UIViewController, FavoriteListViewProtocol {
         tableView.register(FavoriteListCell.self, forCellReuseIdentifier: "Cell")
         tableView.separatorColor = .gray
         presenter?.viewFavoriteList()
-    }
-    
-    @IBAction func topRatedMoviesButtonTapped(_ sender: UIButton) {
-    }
-    
-    @IBAction func profileButtonTapped(_ sender: UIButton) {
-    }
-    
-    @IBAction func favMoviesButtonTapped(_ sender: UIButton) {
+        
+        navigationItem.hidesBackButton = false
     }
     
     func showFavorities(list: [String]) {
@@ -68,6 +56,9 @@ class FavoriteListViewController: UIViewController, FavoriteListViewProtocol {
         let action = UIAlertAction(title: "OK", style: .cancel)
         alert.addAction(action)
         present(alert, animated: true)
+    }
+    
+    deinit {
     }
     
 }
@@ -92,11 +83,18 @@ extension FavoriteListViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "delete") {_, _, completion in
             
-            self.favoriMovies.remove(at: indexPath.row)
-            self.presenter?.removeFavoriteList(at: indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            guard self.favoriMovies.indices.contains(indexPath.row) else {
+                      completion(false)
+                      return
+                  }
             
-            completion(true)
+                  self.favoriMovies.remove(at: indexPath.row)
+                  self.presenter?.removeFavoriteList(at: indexPath.row)
+                  self.tableView.beginUpdates()
+                  self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                  self.tableView.endUpdates()
+
+                  completion(true)
         }
         delete.image = UIImage(systemName: "trash")
 

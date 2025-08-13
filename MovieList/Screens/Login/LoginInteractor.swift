@@ -15,7 +15,7 @@ class LoginInteractor: LoginInteractorProtocol {
     
     let firebaseManager = FirebaseManager()
     
-    var presenter: LoginPresenterProtocol?
+    weak var presenter: LoginPresenterProtocol?
     
     func login(email: String, password: String) {
         firebaseManager.signIn(email: email, password: password) { [weak self] result in

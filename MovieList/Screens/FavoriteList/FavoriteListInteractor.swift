@@ -7,6 +7,7 @@
 protocol FavoriteListInteractorProtocol {
     func fetchFavorites() -> [String]
     func removeFavorites(at index: Int)
+    func getCurrentUserName() -> String
 }
 
 class FavoriteListInteractor: FavoriteListInteractorProtocol {
@@ -21,5 +22,7 @@ class FavoriteListInteractor: FavoriteListInteractorProtocol {
         session.removeFavorite(at: index)
     }
     
-    
+    func getCurrentUserName() -> String {
+        session.currentUserName ?? ""
+    }
 }

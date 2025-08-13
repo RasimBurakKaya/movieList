@@ -8,7 +8,11 @@
 import UIKit
 import FirebaseAuth
 
-class ProfileViewController: UIViewController {
+protocol ProfileViewProtocol: AnyObject {
+    func didUserNameChanged(name: String)
+}
+
+class ProfileViewController: BaseViewController, ProfileViewProtocol {
     
     @IBOutlet weak var logoutButton: UIButton!
     
@@ -26,12 +30,16 @@ class ProfileViewController: UIViewController {
     
     var text: String?
     
+    weak var delegate: MovieListViewProtocol?
+    
+    var presenter: ProfilePresenterProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.hidesBackButton = true
         loadProfileImage()
         setupUI()
+        
         
     }
     
@@ -55,6 +63,7 @@ class ProfileViewController: UIViewController {
         
         view.backgroundColor = .black
         
+        text = presenter?.getUserName()
         userNameTextField.text = text
         userNameTextField.textColor = .white
         userNameTextField.backgroundColor = .darkGray
@@ -73,10 +82,25 @@ class ProfileViewController: UIViewController {
         
     }
     
+    func didUserNameChanged(name: String) {
+        userNameTextField.text = name
+    }
+    
     @IBAction func topMoviesButtonTapped(_ sender: UIButton) {
+     
+        /*if let viewControllers = navigationController?.viewControllers {
+            for vc in viewControllers {
+                if let movieListVC = vc as? MovieListViewController {
+                    //delegate = movieListVC
+                    //delegate?.didupdateUserName(name: text ?? "")
+                    navigationController?.popToViewController(movieListVC, animated: true)
+                    break
+                }
+            }
+        }*/
         
-        let movieListVC = MovieListRouter.createModules(userName: userNameTextField.text ?? "")
-        navigationController?.pushViewController(movieListVC, animated: true)
+        presenter?.backToMovieList()
+
     }
     
     @IBAction func profileButtonTapped(_ sender: UIButton) {
@@ -128,20 +152,23 @@ class ProfileViewController: UIViewController {
         
     }
     
-    func setupTapGesture() {
+  /*  func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
     }
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
-    }
+    }*/
     
     @objc func userNameChange() {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let key = "currentUserName_\(uid)"
         let newUserName = userNameTextField.text
         UserDefaults.standard.set(newUserName, forKey: key)
+    }
+    
+    deinit {
     }
 
 }
@@ -190,6 +217,8 @@ extension ProfileViewController: UIImagePickerControllerDelegate & UINavigationC
             profilImage.image = UIImage(systemName: "person.crop.circle")
         }
     }
+    
+    
 
 
 }

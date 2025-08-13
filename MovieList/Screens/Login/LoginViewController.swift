@@ -11,7 +11,7 @@ protocol LoginViewProtocol: AnyObject {
     func invalidCredetentials()
 }
 
-class LoginViewController: UIViewController, LoginViewProtocol {
+class LoginViewController: BaseViewController, LoginViewProtocol {
     
     @IBOutlet weak var loginLabel: UILabel!
     
@@ -36,19 +36,17 @@ class LoginViewController: UIViewController, LoginViewProtocol {
         
         view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
         
-        navigationItem.hidesBackButton = true
-        
         emailTextField.text = "test16@gmail.com"
         passwordTextField.text = "Password16"
         
         setupUI()
-
+        
     }
     
     @IBAction func loginButtonTapped(_ sender: UIButton) {
         
         presenter?.presentToView(email: emailTextField.text ?? "", password: passwordTextField.text ?? "")
-      
+        
     }
     
     @IBAction func signUpButton(_ sender: UIButton) {
@@ -63,7 +61,8 @@ class LoginViewController: UIViewController, LoginViewProtocol {
         
         emailTextField.placeholder = "Email"
         passwordTextField.placeholder = "Password"
-    
+        passwordTextField.isSecureTextEntry = true
+        
         loginButton.backgroundColor = .black
         loginButton.tintColor = .white
         loginButton.layer.cornerRadius = 12
@@ -78,13 +77,14 @@ class LoginViewController: UIViewController, LoginViewProtocol {
         present(alert, animated: true)
     }
     
-    func setupTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
+    /*func setupTapGesture() {
+     let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+     view.addGestureRecognizer(tapGesture)
+     }
+     
+     @objc func dismissKeyboard() {
+     view.endEditing(true)
+     }*/
 }
+     
+
